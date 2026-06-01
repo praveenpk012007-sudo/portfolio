@@ -201,65 +201,54 @@
     }
     .stat-label { font-size:0.78rem; color:var(--clr-muted); font-weight:500; }
 
-    /* ── HERO PHOTO: morphing blob + 3D tilt ── */
-    .hero-visual { display:flex; justify-content:center; align-items:center; perspective:900px; }
+    /* ── HERO PHOTO: spinning gradient ring ── */
+    .hero-visual { display:flex; justify-content:center; align-items:center; }
 
-    .photo-tilt {
+    .profile-ring {
       position:relative;
       width:clamp(280px,36vw,400px);
       height:clamp(280px,36vw,400px);
-      transform-style:preserve-3d;
-      transition:transform 0.08s linear;
-      cursor:none;
     }
 
-    /* glowing blob shadow layer */
-    .blob-glow {
-      position:absolute; inset:-18px;
-      border-radius:60% 40% 30% 70% / 60% 30% 70% 40%;
-      background:linear-gradient(135deg,var(--clr-primary),var(--clr-accent),var(--clr-pink));
-      filter:blur(28px); opacity:0.55;
-      animation:blobMorph 8s ease-in-out infinite;
-      z-index:0;
-    }
-
-    /* gradient border blob */
-    .blob-border {
+    /* spinning conic ring */
+    .ring-outer {
       position:absolute; inset:0;
-      border-radius:60% 40% 30% 70% / 60% 30% 70% 40%;
-      background:linear-gradient(135deg,var(--clr-primary),var(--clr-accent),var(--clr-pink),var(--clr-primary));
-      animation:blobMorph 8s ease-in-out infinite;
-      padding:4px; z-index:1;
+      border-radius:50%;
+      background:conic-gradient(from 0deg, var(--clr-primary), var(--clr-accent), var(--clr-pink), var(--clr-primary));
+      animation:spin 4s linear infinite;
+      padding:4px;
     }
+    @keyframes spin { to { transform:rotate(360deg); } }
 
-    /* dark inner fill */
-    .blob-bg {
-      width:100%; height:100%;
-      border-radius:inherit;
+    /* dark gap between ring and photo */
+    .ring-inner {
+      position:absolute; inset:4px;
+      border-radius:50%;
       background:var(--clr-bg);
-      padding:6px;
+      padding:8px;
       overflow:hidden;
     }
 
-    /* actual photo */
     .profile-img {
       width:100%; height:100%;
-      border-radius:inherit;
+      border-radius:50%;
       object-fit:cover; object-position:top center;
       display:block;
     }
 
-    @keyframes blobMorph {
-      0%,100% { border-radius:60% 40% 30% 70% / 60% 30% 70% 40%; }
-      20%      { border-radius:30% 60% 70% 40% / 50% 60% 30% 60%; }
-      40%      { border-radius:50% 60% 30% 60% / 30% 60% 70% 40%; }
-      60%      { border-radius:40% 55% 60% 40% / 55% 45% 60% 35%; }
-      80%      { border-radius:60% 40% 60% 30% / 70% 30% 50% 60%; }
+    /* outer soft glow */
+    .ring-glow {
+      position:absolute; inset:-12px;
+      border-radius:50%;
+      background:conic-gradient(from 0deg, var(--clr-primary), var(--clr-accent), var(--clr-pink), var(--clr-primary));
+      filter:blur(18px); opacity:0.35;
+      animation:spin 4s linear infinite;
+      z-index:-1;
     }
 
     /* floating tech chips */
     .tech-chip {
-      position:absolute; background:rgba(20,20,34,0.82); border:1px solid rgba(108,99,255,0.35);
+      position:absolute; background:rgba(20,20,34,0.85); border:1px solid rgba(108,99,255,0.35);
       border-radius:50px; padding:8px 16px; font-size:0.75rem; font-weight:700;
       color:var(--clr-text); backdrop-filter:blur(12px); box-shadow:0 8px 24px rgba(0,0,0,0.4);
       display:flex; align-items:center; gap:7px; white-space:nowrap; z-index:10;
@@ -271,15 +260,6 @@
       0%,100%{transform:translateY(0) rotate(-1deg);}
       50%{transform:translateY(-14px) rotate(1deg);}
     }
-
-    /* custom cursor dot that follows mouse inside tilt */
-    .photo-cursor {
-      position:absolute; width:12px; height:12px; border-radius:50%;
-      background:var(--gradient); pointer-events:none; z-index:20;
-      transform:translate(-50%,-50%) scale(0);
-      transition:transform 0.2s ease; mix-blend-mode:screen;
-    }
-    .photo-tilt:hover .photo-cursor { transform:translate(-50%,-50%) scale(1); }
 
     /* ─────────────────────────────────────────
        ABOUT
@@ -490,7 +470,7 @@
       .hero-btns { justify-content:center; }
       .hero-stats { justify-content:center; }
       .hero-visual { order:-1; }
-      .photo-tilt { width:240px; height:240px; }
+      .profile-ring { width:260px; height:260px; }
       .about-grid { grid-template-columns:1fr; }
       .skills-grid { grid-template-columns:1fr; }
       .contact-grid { grid-template-columns:1fr; }
@@ -584,19 +564,15 @@
           </div>
         </div>
 
-        <!-- visual: morphing blob photo -->
+        <!-- visual: spinning ring -->
         <div class="hero-visual reveal-right">
-          <div class="photo-tilt" id="photoTilt">
-            <div class="photo-cursor" id="photoCursor"></div>
-            <!-- glow behind -->
-            <div class="blob-glow"></div>
-            <!-- gradient border blob -->
-            <div class="blob-border">
-              <div class="blob-bg">
+          <div class="profile-ring">
+            <div class="ring-glow"></div>
+            <div class="ring-outer">
+              <div class="ring-inner">
                 <img src="main.png.jpg" alt="Praveen Kumar R" class="profile-img" />
               </div>
             </div>
-            <!-- floating tech chips -->
             <div class="tech-chip tc-1"><i class="fab fa-html5" style="color:#e34f26"></i> HTML5</div>
             <div class="tech-chip tc-2"><i class="fab fa-js" style="color:#f7df1e"></i> JavaScript</div>
             <div class="tech-chip tc-3"><i class="fab fa-react" style="color:#61dafb"></i> React</div>
@@ -1036,28 +1012,6 @@
       });
     }, { threshold: 0.2 });
     fills.forEach(f => skillObs.observe(f));
-
-    // ─── 3D Tilt effect on photo ───
-    const tiltEl = document.getElementById('photoTilt');
-    const cursor = document.getElementById('photoCursor');
-    if (tiltEl) {
-      tiltEl.addEventListener('mousemove', e => {
-        const rect = tiltEl.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2;
-        const cy = rect.top + rect.height / 2;
-        const dx = (e.clientX - cx) / (rect.width / 2);   // -1 to 1
-        const dy = (e.clientY - cy) / (rect.height / 2);  // -1 to 1
-        const rotX = -dy * 18;   // tilt up/down
-        const rotY =  dx * 18;   // tilt left/right
-        tiltEl.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.03)`;
-        // move cursor dot
-        cursor.style.left = (e.clientX - rect.left) + 'px';
-        cursor.style.top  = (e.clientY - rect.top)  + 'px';
-      });
-      tiltEl.addEventListener('mouseleave', () => {
-        tiltEl.style.transform = 'rotateX(0) rotateY(0) scale(1)';
-      });
-    }
 
     // ─── Contact form ───
     document.getElementById('contactForm').addEventListener('submit', e => {
